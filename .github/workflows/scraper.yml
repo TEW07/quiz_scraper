@@ -1,0 +1,31 @@
+name: Selenium Scraper Automation
+
+on:
+  schedule:
+    - cron: "*/10 * * * *"  # Runs every 10 minutes for testing; adjust to "59 23 * * *" later
+
+jobs:
+  run-scraper:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.9"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Install Chrome
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y google-chrome-stable
+
+      - name: Run Selenium script
+        run: python main.py
