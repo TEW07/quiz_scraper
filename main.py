@@ -1,0 +1,21 @@
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.common.by import By
+from webdriver_manager.chrome import ChromeDriverManager
+import time
+
+service = Service(ChromeDriverManager().install())
+driver = webdriver.Chrome(service=service)
+
+driver.get("https://quizoftheday.co.uk/league/ZE2TJ06KZZ2048")
+time.sleep(5)  
+
+rows = driver.find_elements(By.CSS_SELECTOR, "#leagueScores tbody tr")
+for row in rows:
+    cells = row.find_elements(By.TAG_NAME, "td")
+    initials = cells[0].text
+    score = cells[1].text
+    print(f"Initials: {initials}, Score: {score}")
+
+driver.quit()
+
