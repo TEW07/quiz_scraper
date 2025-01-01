@@ -3,6 +3,7 @@ name: Selenium Scraper Automation
 on:
   schedule:
     - cron: "*/10 * * * *"  # Runs every 10 minutes for testing; adjust to "59 23 * * *" later
+  workflow_dispatch:  # Allows manual triggering
 
 jobs:
   run-scraper:
@@ -29,3 +30,4 @@ jobs:
 
       - name: Run Selenium script
         run: python main.py
+
