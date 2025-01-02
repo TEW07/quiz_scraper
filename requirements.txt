@@ -1,3 +1,4 @@
 selenium
 webdriver-manager
-chromedriver-binary
+gspread
+oauth2client
