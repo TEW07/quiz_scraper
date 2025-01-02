@@ -1,0 +1,36 @@
+name: Test Google Sheets Integration
+
+on:
+  workflow_dispatch: # Allows manual triggering
+
+jobs:
+  test-google-sheets:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the repository
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Python
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      # Step 3: Install dependencies
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      # Step 4: Set up Google credentials
+      - name: Set up Google credentials
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ github.workspace }}/credentials.json
+        run: |
+          echo "${{ secrets.GOOGLE_CREDENTIALS }}" > credentials.json
+
+      # Step 5: Run the script
+      - name: Test Google Sheets script
+        run: python test_google_sheets.py
