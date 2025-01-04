@@ -12,7 +12,7 @@ scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/au
 creds = ServiceAccountCredentials.from_json_keyfile_name("leaderboard_credentials.json", scope)
 client = gspread.authorize(creds)
 
-SHEET_NAME = "TestLeader"  
+SHEET_NAME = "QOTD Leaderboard"  
 sheet = client.open(SHEET_NAME).sheet1  
 
 today_date = datetime.datetime.today().strftime("%d-%m-%Y")  # UK format (DD-MM-YYYY)
