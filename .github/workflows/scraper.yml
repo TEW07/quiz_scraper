@@ -23,9 +23,18 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Debug Secret Output
+        run: |
+          echo '${{ secrets.GOOGLE_CREDENTIALS }}' | head -n 10  # Print first 10 lines for debugging
+
       - name: Set up Google Credentials
         run: |
-          echo "${{ secrets.GOOGLE_CREDENTIALS }}" > leaderboard_credentials.json
+          echo '${{ secrets.GOOGLE_CREDENTIALS }}' > leaderboard_credentials.json
+          cat leaderboard_credentials.json | head -n 10  # Show first 10 lines for verification
+
+      - name: Validate JSON Formatting
+        run: |
+          python -c "import json; json.load(open('leaderboard_credentials.json'))" && echo "JSON is valid"
 
       - name: Run Selenium script
         run: python main.py
