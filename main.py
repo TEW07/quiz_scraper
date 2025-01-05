@@ -15,11 +15,9 @@ client = gspread.authorize(creds)
 SHEET_NAME = "QOTD Leaderboard"  
 sheet = client.open(SHEET_NAME).sheet1  
 
-today_date = datetime.datetime.today().strftime("%d-%m-%Y")  # UK format (DD-MM-YYYY)
-existing_data = sheet.get_all_values()
+today_date = datetime.datetime.today().strftime("%d-%m-%Y")
 
-
-existing_dates = sheet.col_values(2)[1:]  # Skip the header row
+existing_dates = sheet.col_values(2)[5:] 
 
 print("Existing dates in sheet:", existing_dates)
 print("Today's date:", today_date)
@@ -28,8 +26,16 @@ if today_date in existing_dates:
     print(f"Data for {today_date} already exists. Skipping update.")
     exit(0)
 
+used_rows = set()
+for col in range(2, 10):  # Columns B to I (2 to 9)
+    col_data = sheet.col_values(col)
+    used_rows.update(range(6, len(col_data) + 1))
 
+next_row = 6
+while next_row in used_rows:
+    next_row += 1
 
+print("Next available row for new data:", next_row)
 
 chrome_options = Options()
 chrome_options.add_argument("--headless")  
@@ -53,16 +59,22 @@ for row in rows:
 
 driver.quit()
 
-
 expected_players = ["EM", "LG", "RH", "SG", "SH", "TM", "TW"]
 
 new_row = [today_date]  
 for player in expected_players:
-    new_row.append(leaderboard.get(player, "-")) 
+    score = leaderboard.get(player, "-")
+    if score.isdigit():  
+        new_row.append(int(score))  
+    else:
+        new_row.append(score)  
+
 
 print("New row to be added:", new_row)
 
-sheet.append_row(new_row, value_input_option="USER_ENTERED")
-print(f"Successfully added scores for {today_date}.")
+sheet.update(f"B{next_row}:I{next_row}", [new_row])
+
+print(f"Successfully added scores for {today_date} in row {next_row}.")
+
 
 
