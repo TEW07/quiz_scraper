@@ -55,7 +55,8 @@ for row in rows:
     cells = row.find_elements(By.TAG_NAME, "td")
     initials = cells[0].text.strip().upper()
     score = cells[1].text.strip()
-    leaderboard[initials] = score
+    if initials not in leaderboard:
+        leaderboard[initials] = score
 
 driver.quit()
 
