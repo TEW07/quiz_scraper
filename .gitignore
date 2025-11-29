@@ -4,3 +4,5 @@ format_credentials.py
 formatted_google_credentials.json
 make_secret.py
 test_json.py
+analysis_venv/
+.github/workflows/get_credentials.yml
