@@ -1,4 +1,5 @@
 import gspread
+from  gspread_formatting import *
 from oauth2client.service_account import ServiceAccountCredentials
 import datetime
 
@@ -7,6 +8,22 @@ creds = ServiceAccountCredentials.from_json_keyfile_name("leaderboard_credential
 client = gspread.authorize(creds)
 
 SHEET_NAME = "QOTD Leaderboard"  
+
+fmt = cellFormat(
+    backgroundColor=color(1, 1, 1),
+    textFormat=textFormat(
+        bold=False,
+        foregroundColor=color(0, 0, 0)
+    ),
+    horizontalAlignment='CENTER',
+    borders=Borders(
+        top=Border('SOLID', color(0, 0, 0)),
+        bottom=Border('SOLID', color(0, 0, 0)),
+        left=Border('SOLID', color(0, 0, 0)),
+        right=Border('SOLID', color(0, 0, 0))
+    ))
+
+
 sheet = client.open(SHEET_NAME).sheet1  
 
 today_date = datetime.datetime.today().strftime("%d-%m-%Y")
@@ -54,6 +71,8 @@ for player in expected_players:
     else:
         new_row.append(score)  
 
+print("new_row Type: \n", type(new_row), "new_row: ", new_row)
 print("New row to be added:", new_row)
 
 sheet.update(f"B{next_row}:I{next_row}", [new_row])
+format_cell_range(sheet, f"B{next_row}:I{next_row}", fmt)
