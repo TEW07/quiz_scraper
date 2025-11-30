@@ -4,6 +4,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
 import gspread
+from  gspread_formatting import *
 from oauth2client.service_account import ServiceAccountCredentials
 import time
 import datetime
