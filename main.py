@@ -15,6 +15,20 @@ client = gspread.authorize(creds)
 SHEET_NAME = "QOTD Leaderboard"  
 sheet = client.open(SHEET_NAME).sheet1  
 
+fmt = cellFormat(
+    backgroundColor=color(1, 1, 1),
+    textFormat=textFormat(
+        bold=False,
+        foregroundColor=color(0, 0, 0)
+    ),
+    horizontalAlignment='CENTER',
+    borders=Borders(
+        top=Border('SOLID', color(0, 0, 0)),
+        bottom=Border('SOLID', color(0, 0, 0)),
+        left=Border('SOLID', color(0, 0, 0)),
+        right=Border('SOLID', color(0, 0, 0))
+    ))
+
 today_date = datetime.datetime.today().strftime("%d-%m-%Y")
 
 existing_dates = sheet.col_values(2)[5:] 
@@ -73,6 +87,7 @@ for player in expected_players:
 print("New row to be added:", new_row)
 
 sheet.update(f"B{next_row}:I{next_row}", [new_row])
+format_cell_range(sheet, f"B{next_row}:I{next_row}", fmt)
 
 print(f"Successfully added scores for {today_date} in row {next_row}.")
 
